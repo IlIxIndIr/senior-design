@@ -67,9 +67,6 @@ for root, dirs, files in os.walk(output_path):
 
                     # define error bars
                     mid_e = (sen_data['low_eb'] + sen_data['high_eb'])/2
-                    print(sen_data['low_eb'])
-                    print(sen_data['high_eb'])
-                    print(mid_e)
                     sen_leth_unc = np.multiply(sen_data['sen_leth'], sen_data['sen_unc'])
                     plt.errorbar(mid_e, sen_data['sen_leth'], yerr=sen_leth_unc, fmt='none', color='black')
 
