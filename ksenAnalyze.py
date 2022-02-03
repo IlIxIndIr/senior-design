@@ -41,7 +41,7 @@ for root, dirs, files in os.walk(output_path):
                     sen_data = pd.DataFrame(data=sen_array, columns=['low_eb', 'high_eb', 'sen_vals', 'sen_unc'])
 
                     # define empty lethargy and sensitivity per lethargy arrays
-                    lethargy = np.log(np.divide(sen_data['high_eb'].max(), sen_data['low_eb']))
+                    lethargy = np.log(np.divide(sen_data['high_eb'], sen_data['low_eb']))
                     sen_data['sen_leth'] = np.divide(sen_data['sen_vals'], lethargy)
 
                     # plot sensitivity profile
@@ -50,24 +50,27 @@ for root, dirs, files in os.walk(output_path):
                     
                     # format plot
                     # set axis labels & title
-                    ax.set_title("Sensitivity data for Fe-56 total cross-section (1p8 U6)")
-                    ax.set_xlabel("Energy [MeV]", labelpad=20, weight='bold', size=12)
-                    ax.set_ylabel("Sensitivity per Lethargy", labelpad=20, weight='bold', size=12)
+                    ax.set_title('26056.00c total (1p8 U6)')
+                    ax.set_xlabel('Energy [MeV]', labelpad=20, weight='bold', size=12)
+                    ax.set_ylabel('$S_{k, \sigma}$ (Sensitivity per Unit Lethargy)',
+                                  labelpad=20, weight='bold', size=12)
 
-                    # set x-axis to log scale
+                    # set x-axis to log scale & axis limits
                     ax.set_xscale('log')
+                    plt.xlim(sen_data['low_eb'].min(), sen_data['high_eb'].max())
 
                     # set the grid on & ticks
-                    ax.grid('on', linestyle="--", alpha=.3, linewidth=.5)
+                    ax.grid('on', linestyle='--', alpha=.3, linewidth=.5)
                     ax.tick_params(bottom=True, top=True, left=True, right=True)
                     ax.tick_params(axis="x", direction="in")
                     ax.tick_params(axis="y", direction="in")
 
                     # define error bars
-                    """
-                    mid_e = [((sen_data['low_eb'][mid]+sen_data['high_eb'][mid])/2.)
-                             for mid in range(sen_data['low_eb'].shape[0])]
-                    plt.errorbar(mid_e, sen_data['sen_leth'], yerr=(sen_data['sen_unc']/100))
-                    """
+                    mid_e = (sen_data['low_eb'] + sen_data['high_eb'])/2
+                    print(sen_data['low_eb'])
+                    print(sen_data['high_eb'])
+                    print(mid_e)
+                    sen_leth_unc = np.multiply(sen_data['sen_leth'], sen_data['sen_unc'])
+                    plt.errorbar(mid_e, sen_data['sen_leth'], yerr=sen_leth_unc, fmt='none', color='black')
 
                     plt.show()
