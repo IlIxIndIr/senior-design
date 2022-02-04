@@ -46,7 +46,9 @@ for root, dirs, files in os.walk(output_path):
 
                     # plot sensitivity profile
                     fig, ax = plt.subplots()
-                    ax.step(sen_data['low_eb'], sen_data['sen_leth'], where='pre')
+                    e = np.insert(np.array(sen_data['high_eb']), 0, sen_data['low_eb'][0])
+                    spl = np.insert(np.array(sen_data['sen_leth']), 0, sen_data['sen_leth'][0])
+                    ax.step(e, spl, where='pre')
                     
                     # format plot
                     # set axis labels & title
@@ -71,3 +73,4 @@ for root, dirs, files in os.walk(output_path):
                     plt.errorbar(mid_e, sen_data['sen_leth'], yerr=sen_leth_unc, fmt='none', color='black')
 
                     plt.show()
+                    plt.savefig("KSEN_plot.png", bbox_inches='tight', dpi=1200)
